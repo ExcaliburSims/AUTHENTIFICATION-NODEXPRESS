@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require('express');
 const mysql = require('mysql');
 const app = express();
-
+/////////////////////////////////////////////////////////////////////////////////////////
 //CONNEXION TO DATABASE
 const connex = mysql.createPool({
 	connectionLimit: 10,
@@ -21,6 +21,38 @@ connex.getConnection((err) => {
   }
 })
 
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+//FIRST REQUETE TO VIEW ALL USERS ON THE DATABASE
+
+app.get('/users', (req, res) => {
+  const sql1 = 'select * from userTable'
+  connex.query(sql1, (err, resultat) => {
+    if (err) throw err
+      res.send(resultat)
+  })
+})
+
+//CREATE USER
+//Middlewre
+
+app.use(express.json())
+
+app.post("/users/register", async (req, res) => {
+  const {user, password} = req.body
+  const sqlInsert = 'INSERT INTO userTable (user,password) VALUES (?,?)'
+
+  connex.query(sqlInsert, [user, password], (err, result) => {
+    if (err) throw err
+    console.log('--------> Created new User')
+    res.send(result)
+  })
+})
+////////////////////////////////////////////////////////////////////////////////
 
 
 //SERVEUR
