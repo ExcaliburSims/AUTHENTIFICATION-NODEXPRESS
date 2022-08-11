@@ -24,10 +24,6 @@ connex.getConnection((err) => {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
 //FIRST REQUETE TO VIEW ALL USERS ON THE DATABASE
 
 app.get('/users', (req, res) => {
