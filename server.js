@@ -40,12 +40,13 @@ app.get('/users', (req, res) => {
 app.use(express.json())
 
 app.post("/users/register", async (req, res) => {
-  const salt = bcrypt.genSalt(5)
   const user = req.body.user
   const password = req.body.password
+  const salt = await bcrypt.genSalt(10)
+  const hash = await bcrypt.hash(password, salt)
   const sqlInsert = 'INSERT INTO userTable (user,password) VALUES (?,?)'
 
-  connex.query(sqlInsert, [user, password], (err, result) => {
+  connex.query(sqlInsert, [user, hash], (err, result) => {
     if (err) throw err
     console.log('--------> Created new User')
     res.send(result)
