@@ -52,6 +52,24 @@ app.post("/users/register", async (req, res) => {
     res.send(result)
   })
 })
+
+//LOGIN USER
+
+app.post("/users/login", async (req, res) => {
+  const {user, password} = req.body
+  const sqllogin = 'select * from userTable where user=? AND password=?'
+
+  connex.query(sqllogin, [user, password], (err, result) => {
+    if (err) {
+      res.status(500).send(err)
+    } else if (result.length > 0) {
+      res.status(200).send(result[0])
+    } else {
+      res.status(400).send("L'utilisateur n'existe pas")
+    }
+    // connect.end()
+  })
+})
 ////////////////////////////////////////////////////////////////////////////////
 
 
