@@ -56,8 +56,9 @@ app.post("/users/register", async (req, res) => {
 //LOGIN USER
 
 app.post("/users/login", async (req, res) => {
-  const {user, password} = req.body
-  const sqllogin = 'select * from userTable where user=? AND password=?'
+  const { user, password } = req.body
+  const salt2 = await bcrypt.genSalt(10)
+  const sqllogin = `select * from userTable where user=? AND password= ${await bcrypt.compare(password, salt2)}`
 
   connex.query(sqllogin, [user, password], (err, result) => {
     if (err) {
