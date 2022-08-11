@@ -40,7 +40,9 @@ app.get('/users', (req, res) => {
 app.use(express.json())
 
 app.post("/users/register", async (req, res) => {
-  const {user, password} = req.body
+  const salt = bcrypt.genSalt(5)
+  const user = req.body.user
+  const password = req.body.password
   const sqlInsert = 'INSERT INTO userTable (user,password) VALUES (?,?)'
 
   connex.query(sqlInsert, [user, password], (err, result) => {
